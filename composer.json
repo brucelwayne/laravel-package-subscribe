@@ -1,0 +1,38 @@
+{
+    "name": "brucelwayne/laravel-package-subscribe",
+    "description": "This is a Laravel-based package for collecting subscription emails, with support for multiple teams.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bruce Wayne"
+        }
+    ],
+    "require": {
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+
+        },
+        "files": [
+
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+
+            ],
+            "aliases": {
+
+            }
+        }
+    }
+}
