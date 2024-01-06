@@ -9,6 +9,7 @@
         }
     ],
     "require": {
+        "overtrue/laravel-subscribe": "^4.2"
     },
     "require-dev": {
     },
