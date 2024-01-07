@@ -9,15 +9,16 @@
         }
     ],
     "require": {
+        "overtrue/laravel-subscribe": "^4.2"
     },
     "require-dev": {
     },
     "autoload": {
         "psr-4": {
-
+            "Brucelwayne\\Subscribe\\": "src"
         },
         "files": [
-
+            "src/helpers.php"
         ]
     },
     "autoload-dev": {
@@ -28,7 +29,7 @@
     "extra": {
         "laravel": {
             "providers": [
-
+                "Brucelwayne\\Subscribe\\SubscribeServiceProvider"
             ],
             "aliases": {
 
