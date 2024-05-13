@@ -2,12 +2,10 @@
 
 namespace Brucelwayne\Subscribe;
 
-use Brucelwayne\Blog\Contracts\IBlogService;
-use Brucelwayne\Blog\Services\BlogService;
+use Brucelwayne\Subscribe\Models\EmailSubscriberModel;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Mallria\Core\Contracts\WordpressWebhookContract;
-use Mallria\Core\Services\WordpressWebhookService;
 
 class SubscribeServiceProvider extends ServiceProvider
 {
@@ -20,6 +18,11 @@ class SubscribeServiceProvider extends ServiceProvider
 
     public function boot()
     {
+
+        Relation::enforceMorphMap([
+            'email_subscriber' => EmailSubscriberModel::class,
+        ]);
+
         $this->bootFacades();
         $this->bootConfigs();
         $this->bootRoutes();
