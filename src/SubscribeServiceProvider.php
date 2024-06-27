@@ -20,7 +20,7 @@ class SubscribeServiceProvider extends ServiceProvider
     {
 
         Relation::enforceMorphMap([
-            'email_subscriber' => EmailSubscriberModel::class,
+            'blw_email_subscribers' => EmailSubscriberModel::class,
         ]);
 
         $this->bootFacades();
@@ -34,16 +34,6 @@ class SubscribeServiceProvider extends ServiceProvider
     protected function bootFacades(): void
     {
 
-    }
-
-    protected function loadBladeViews(): void
-    {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', $this->module_name);
-    }
-
-    protected function bootComponentNamespace(): void
-    {
-        Blade::componentNamespace('Brucelwayne\\Subscribe\\View\\Components', $this->module_name);
     }
 
     protected function bootConfigs(): void
@@ -62,5 +52,15 @@ class SubscribeServiceProvider extends ServiceProvider
     protected function bootMigrations(): void
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+    }
+
+    protected function bootComponentNamespace(): void
+    {
+        Blade::componentNamespace('Brucelwayne\\Subscribe\\View\\Components', $this->module_name);
+    }
+
+    protected function loadBladeViews(): void
+    {
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', $this->module_name);
     }
 }
