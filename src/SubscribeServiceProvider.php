@@ -28,7 +28,6 @@ class SubscribeServiceProvider extends ServiceProvider
         $this->bootRoutes();
         $this->bootMigrations();
         $this->bootComponentNamespace();
-        $this->loadBladeViews();
     }
 
     protected function bootFacades(): void
@@ -57,10 +56,5 @@ class SubscribeServiceProvider extends ServiceProvider
     protected function bootComponentNamespace(): void
     {
         Blade::componentNamespace('Brucelwayne\\Subscribe\\View\\Components', $this->module_name);
-    }
-
-    protected function loadBladeViews(): void
-    {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', $this->module_name);
     }
 }
