@@ -30,12 +30,7 @@ class EmailSubscriberModel extends BaseMysqlModel
         'id',
     ];
 
-    public function getRouteKeyName()
-    {
-        return 'hash';
-    }
-
-    static function subscribe($email, string|array|null $tags)
+    static function subscribe($email, string|array|null $tags=[])
     {
         return DB::transaction(function () use ($email, $tags) {
             $key = ['email' => $email];
@@ -84,15 +79,16 @@ class EmailSubscriberModel extends BaseMysqlModel
             }
 
             if ($model->delete()) {
+                //取消所有的tags
+                $model->tags()->detach();
                 return true;
             }
-
-            //取消所有的tags
-            $model->tags()->detach();
-
-            //调用 mailchimp api
-
             return false;
         });
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'hash';
     }
 }
