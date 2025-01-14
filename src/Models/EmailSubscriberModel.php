@@ -57,7 +57,7 @@ class EmailSubscriberModel extends BaseMysqlModel
             }
 
 
-            //调用 mailchimp api
+            //TODO: 调用 mailchimp api
 
             return $model;
         });
