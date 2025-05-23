@@ -8,6 +8,9 @@ use Mallria\Core\Models\BaseMysqlModel;
 use Spatie\Tags\HasTags;
 use Veelasky\LaravelHashId\Eloquent\HashableId;
 
+/**
+ * @property string $email
+ */
 class EmailSubscriberModel extends BaseMysqlModel
 {
     use HashableId;
@@ -30,7 +33,7 @@ class EmailSubscriberModel extends BaseMysqlModel
         'id',
     ];
 
-    static function subscribe($email, string|array|null $tags=[])
+    static function subscribe($email, string|array|null $tags = [])
     {
         return DB::transaction(function () use ($email, $tags) {
             $key = ['email' => $email];
