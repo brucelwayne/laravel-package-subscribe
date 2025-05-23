@@ -4,6 +4,7 @@ namespace Brucelwayne\Subscribe\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Mallria\Analytics\Events\SubscribeEvent;
 use Mallria\Core\Models\BaseMysqlModel;
 use Spatie\Tags\HasTags;
 use Veelasky\LaravelHashId\Eloquent\HashableId;
@@ -35,7 +36,7 @@ class EmailSubscriberModel extends BaseMysqlModel
 
     static function subscribe($email, string|array|null $tags = [])
     {
-        return DB::transaction(function () use ($email, $tags) {
+        $model = DB::transaction(function () use ($email, $tags) {
             $key = ['email' => $email];
 
             //看看是否有删除的，删除的是用户取消订阅的
@@ -64,6 +65,12 @@ class EmailSubscriberModel extends BaseMysqlModel
 
             return $model;
         });
+        
+        event(new SubscribeEvent([
+            'subscriber' => $model,
+        ]));
+
+        return $model;
     }
 
     static function unsubscribe($email)
