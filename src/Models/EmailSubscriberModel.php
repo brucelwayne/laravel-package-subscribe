@@ -2,11 +2,12 @@
 
 namespace Brucelwayne\Subscribe\Models;
 
+use Brucelwayne\Subscribe\Enums\EmailSubscribeSource;
+use Brucelwayne\Subscribe\Traits\HasEmailSubscribeTags;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Mallria\Analytics\Events\SubscribeEvent;
 use Mallria\Core\Models\BaseMysqlModel;
-use Spatie\Tags\HasTags;
 use Veelasky\LaravelHashId\Eloquent\HashableId;
 
 /**
@@ -16,7 +17,7 @@ class EmailSubscriberModel extends BaseMysqlModel
 {
     use HashableId;
     use SoftDeletes;
-    use HasTags;
+    use HasEmailSubscribeTags;
 
     protected $table = 'blw_email_subscribers';
 
@@ -34,9 +35,13 @@ class EmailSubscriberModel extends BaseMysqlModel
         'id',
     ];
 
-    static function subscribe($email, string|array|null $tags = [])
+    static function subscribe($email, string|array|null $tags = [], EmailSubscribeSource $source = EmailSubscribeSource::PopupSubscribe)
     {
-        $model = DB::transaction(function () use ($email, $tags) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new \InvalidArgumentException("Invalid email format: $email");
+        }
+        
+        $model = DB::transaction(function () use ($email, $tags, $source) {
             $key = ['email' => $email];
 
             //看看是否有删除的，删除的是用户取消订阅的
@@ -60,12 +65,21 @@ class EmailSubscriberModel extends BaseMysqlModel
                 }
             }
 
+            $request = \request();
+
+            EmailSubscribeLogModal::create([
+                'email' => $email,
+                'ip' => $request->getRealIp(),
+                'user_agent' => $request->userAgent(),
+                'source' => $source->value,
+            ]);
+
 
             //TODO: 调用 mailchimp api
 
             return $model;
         });
-        
+
         event(new SubscribeEvent([
             'subscriber' => $model,
         ]));
