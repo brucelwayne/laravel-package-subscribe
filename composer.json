@@ -9,7 +9,10 @@
         }
     ],
     "require": {
-        "overtrue/laravel-subscribe": "^4.2"
+        "overtrue/laravel-subscribe": "^4.2",
+        "mailgun/mailgun-php": "^4.3",
+        "nyholm/psr7": "^1.8",
+        "symfony/http-client": "^7.3"
     },
     "require-dev": {
     },
