@@ -18,40 +18,38 @@ return [
 
     //$recipients = array_filter($recipients, fn($r) => !shouldExcludeEmail($r->email));
     'exclude_email_patterns' => [
-        // 精确测试邮箱
+        // === 精确匹配邮箱地址 ===
         '/^herilan@hotmail\.com$/i',
-        '/^bruce\.lu@live\.cn$/i',  // 修正点号转义
-//        '/^xxx@example\.com$/i',
+        '/^bruce\.lu@live\.cn$/i',
 
-        //确定的一些邮箱地址
-        // 匹配任何 airwallex 相关邮箱（如 airwallex.com、airwallex.net、airwallex.cn 等）
-        '/@airwallex\..*$/i',
+        // === 特定组织/品牌的邮箱域（匹配任意后缀） ===
+        '/@airwallex\./i',
+        '/@mallria\./i',
+        '/@boreshijia\./i',
+        '/@brsj\./i',
 
-        // 匹配任何 mallria 相关邮箱
-        '/@mallria\..*$/i',
-        '/@boreshijia\..*$/i',
-        '/@brsj\..*$/i',
+        // === 保留域名（RFC 2606） ===
+        '/@example\./i',
+        '/@test\./i',
+        '/@invalid\./i',
 
-        // RFC 2606 标准保留域名（常用于示例和文档）
-        '/@example\.com$/i',
-        '/@example\.net$/i',
-        '/@example\.org$/i',
-        '/@test\.com$/i',
-        '/@invalid\.com$/i',
-        '/@local\.test$/i',
+        // === 所有 .test 和 .local 域结尾的邮箱 ===
+        '/@[\w.-]+\.test$/i',
+        '/@[\w.-]+\.local$/i',
 
-        // 假数据生成器和临时邮箱服务常见域名
-        '/@fakeemail\.com$/i',
-        '/@faker\..*$/i',
-        '/@mailinator\.com$/i',
-        '/@10minutemail\.com$/i',
-        '/@tempmail\..*$/i',
-        '/@guerrillamail\.com$/i',
-        '/@dispostable\.com$/i',
-        '/@yopmail\.com$/i',
-        '/@trashmail\..*$/i',
-        '/@throwawaymail\.com$/i',
+        // === 假数据生成器和临时邮箱服务商 ===
+        '/@fakeemail\./i',
+        '/@faker\./i',
+        '/@mailinator\./i',
+        '/@10minutemail\./i',
+        '/@tempmail\./i',
+        '/@guerrillamail\./i',
+        '/@dispostable\./i',
+        '/@yopmail\./i',
+        '/@trashmail\./i',
+        '/@throwawaymail\./i',
     ],
+
 
     // 使用哪个邮件引擎，支持 'mailgun' 或 'postmark'
     'engine' => env('MAIL_ENGINE', 'mailgun'),
