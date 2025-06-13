@@ -6,7 +6,7 @@ use Brucelwayne\Subscribe\Enums\EmailSubscribeSource;
 use Brucelwayne\Subscribe\Traits\HasEmailSubscribeTags;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
-use Mallria\Analytics\Events\SubscribeEvent;
+use Mallria\Analytics\Facades\AnalyticsFacade;
 use Mallria\Core\Models\BaseMysqlModel;
 use Veelasky\LaravelHashId\Eloquent\HashableId;
 
@@ -40,7 +40,7 @@ class EmailSubscriberModel extends BaseMysqlModel
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException("Invalid email format: $email");
         }
-        
+
         $model = DB::transaction(function () use ($email, $tags, $source) {
             $key = ['email' => $email];
 
@@ -80,9 +80,13 @@ class EmailSubscriberModel extends BaseMysqlModel
             return $model;
         });
 
-        event(new SubscribeEvent([
+        AnalyticsFacade::subscribe([
+            'email' => $email,
             'subscriber' => $model,
-        ]));
+        ]);
+//        event(new SubscribeEvent([
+//            'subscriber' => $model,
+//        ]));
 
         return $model;
     }
