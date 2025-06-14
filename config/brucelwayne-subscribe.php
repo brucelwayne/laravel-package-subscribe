@@ -1,14 +1,6 @@
 <?php
 
 return [
-
-    'test-mail' => [
-        'from' => [
-            'address' => env('MAIL_FROM_ADDRESS', 'hello@mallria.com'),
-            'name' => env('MAIL_FROM_NAME', 'Hello'),
-        ],
-    ],
-
     'mail' => [
         'from' => [
             'address' => env('MAIL_FROM_ADDRESS', 'hello@mallria.com'),
@@ -58,6 +50,7 @@ return [
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'api_key' => env('MAILGUN_API_KEY'),
+        'webhook_secret' => env('MAILGUN_WEBHOOK_SECRET'),
     ],
 
     // Postmark 配置

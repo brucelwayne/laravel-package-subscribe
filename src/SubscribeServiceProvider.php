@@ -3,7 +3,9 @@
 namespace Brucelwayne\Subscribe;
 
 use Brucelwayne\Subscribe\Models\EmailSubscriberModel;
+use Brucelwayne\Subscribe\Transports\MailgunTransport;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Mail\MailManager;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,6 +20,9 @@ class SubscribeServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        app(MailManager::class)->extend('mailgun', function ($config) {
+            return new MailgunTransport();
+        });
 
         Relation::enforceMorphMap([
             'blw_email_subscribers' => EmailSubscriberModel::class,
@@ -46,6 +51,7 @@ class SubscribeServiceProvider extends ServiceProvider
     {
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->loadRoutesFrom(__DIR__ . '/../routes/admin.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/webhook.php');
     }
 
     protected function bootMigrations(): void
