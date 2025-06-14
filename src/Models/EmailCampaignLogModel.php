@@ -2,7 +2,6 @@
 
 namespace Brucelwayne\Subscribe\Models;
 
-use Brucelwayne\Subscribe\Enums\EmailCampaignStatus;
 use Illuminate\Support\Carbon;
 use Mallria\Core\Models\BaseMysqlModel;
 use Veelasky\LaravelHashId\Eloquent\HashableId;
@@ -11,9 +10,10 @@ use Veelasky\LaravelHashId\Eloquent\HashableId;
  * @property int $id
  * @property int $campaign_id
  * @property string $email
- * @property string variables
- * @property EmailCampaignStatus $status
- * @property string|null $error_message
+ * @property string $status
+ *
+ * @property string $variables
+ * @property array $payload
  * @property Carbon|null $sent_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -29,14 +29,8 @@ class EmailCampaignLogModel extends BaseMysqlModel
         'campaign_id',
         'email',
         'status',
-        'error_message',
         'sent_at',
-    ];
-
-    protected $dates = [
-        'sent_at',
-        'created_at',
-        'updated_at',
+        'payload',
     ];
 
     protected $appends = [
@@ -48,7 +42,7 @@ class EmailCampaignLogModel extends BaseMysqlModel
     ];
 
     protected $casts = [
-        'status' => EmailCampaignStatus::class,
+        'payload' => 'array',
         'variables' => 'array',
     ];
 

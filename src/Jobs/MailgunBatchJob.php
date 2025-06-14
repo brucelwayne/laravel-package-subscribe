@@ -3,6 +3,8 @@
 namespace Brucelwayne\Subscribe\Jobs;
 
 
+use Brucelwayne\Subscribe\Enums\EmailCampaignStatus;
+use Brucelwayne\Subscribe\Models\EmailCampaignLogModel;
 use Brucelwayne\Subscribe\Models\EmailCampaignModel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -59,6 +61,10 @@ class MailgunBatchJob implements ShouldQueue
 
         $batchMessage->setSubject($this->campaign->subject);
         $batchMessage->setHtmlBody($this->campaign->template);
+        $batchMessage->addCustomHeader('X-Payload', json_encode([
+                'campaign_id' => $this->campaign->hash,
+            ]
+        ));
 
         foreach ($this->recipients as $recipient) {
             $batchMessage->addToRecipient(
@@ -83,6 +89,19 @@ class MailgunBatchJob implements ShouldQueue
         // 可选：记录 message-ids
         $messageIds = $batchMessage->getMessageIds();
         // 你可以 $this->campaign->logMessageIds($messageIds); 之类的
+
+        foreach ($this->recipients as $recipient) {
+            if (!empty($recipient->email)) {
+                EmailCampaignLogModel::updateOrCreate([
+                    'campaign_id' => $this->campaign->getKey(),
+                    'email' => $recipient->email,
+                ], [
+                    'status' => EmailCampaignStatus::Pending,
+                    'variables' => $this->recipients,
+                ]);
+            }
+        }
+
     }
 }
 

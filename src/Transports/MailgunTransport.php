@@ -90,7 +90,7 @@ class MailgunTransport extends AbstractTransport
         EmailWebhookModel::create([
             'provider' => 'mailgun',
             'message_id' => $message_id,
-            'to_emails' => json_encode($toEmails),
+            'to_emails' => $toEmails,
             'status' => EmailCampaignStatus::Sent,
             'payload' => $payload,
         ]);

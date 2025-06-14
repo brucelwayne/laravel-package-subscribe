@@ -13,14 +13,15 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('campaign_id');  // 关联campaign表
             $table->string('email');                    // 收件人邮箱
+            $table->string('status')->default('pending');
+
             $table->json('variables')->nullable()->comment('用于渲染模板的变量值');
-            $table->enum('status', ['pending', 'sending', 'sent', 'failed'])->default('pending');
-            $table->text('error_message')->nullable(); // 失败原因
+            $table->json('payload')->nullable();
             $table->timestamp('sent_at')->nullable();  // 实际发送时间
             $table->timestamps();
 
-            $table->index('campaign_id');
-            $table->index('email');
+            $table->unique(['campaign_id', 'email'], 'campaign_email_unique');
+
             $table->index('status');
             $table->index('sent_at');
         });
