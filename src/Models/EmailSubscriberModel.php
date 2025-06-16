@@ -108,7 +108,7 @@ class EmailSubscriberModel extends BaseMysqlModel
 
             if ($model->delete()) {
                 //取消所有的tags
-                $model->tags()->detach();
+//                $model->tags()->detach();
                 return true;
             }
             return false;
